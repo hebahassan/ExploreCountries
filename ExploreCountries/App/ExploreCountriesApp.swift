@@ -11,7 +11,7 @@ import SwiftUI
 struct ExploreCountriesApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
         }
     }
 }
