@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Flags: Codable {
+struct Flags: Decodable {
     let png: String
     let svg: String
     let alt: String
