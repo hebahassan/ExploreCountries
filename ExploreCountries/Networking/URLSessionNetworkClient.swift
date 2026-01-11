@@ -8,16 +8,22 @@
 import Foundation
 
 final class URLSessionNetworkClient: NetworkClient {
+    private let baseURL: URL
     private let session: URLSession
     private let decoder: JSONDecoder
     
-    init(session: URLSession = .shared, decoder: JSONDecoder = JSONDecoder()) {
+    init(
+        baseURL: URL,
+        session: URLSession = .shared,
+        decoder: JSONDecoder = JSONDecoder()
+    ) {
+        self.baseURL = baseURL
         self.session = session
         self.decoder = decoder
     }
     
     func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
-        let request = try endpoint.makeRequest()
+        let request = try endpoint.makeRequest(baseURL: baseURL)
         
         do {
             let (data, response) = try await session.data(for: request)
@@ -31,8 +37,10 @@ final class URLSessionNetworkClient: NetworkClient {
             }
             
             do {
+                print("BODY:", String(data: data, encoding: .utf8) ?? "nil")
                 return try decoder.decode(T.self, from: data)
             } catch {
+                print("ERROR: decoding error, \(error.localizedDescription)")
                 throw NetworkError.decodingError(error)
             }
         } catch {

@@ -9,13 +9,32 @@ import SwiftUI
 
 struct CountriesListView: View {
     @State private var searchText = ""
-    @State private var countries: [Country] = Country.dummy
+    @StateObject private var viewModel: CountriesViewModel
+
+    init(viewModel: CountriesViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         VStack {
+            content
+        }
+        .navigationTitle("Explore Countries")
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always) ,prompt: "Search by name or region")
+        .task {
+            viewModel.loadCountries()
+        }
+    }
+    
+    @ViewBuilder
+    private var content: some View {
+        switch viewModel.state {
+        case .loading, .idle:
+            ProgressView("Loading...")
+        case .loaded(let countries):
             List(countries) { country in
                 HStack (spacing: 12) {
-                    AsyncImage(url: URL(string: country.flags.png)) { phase in
+                    AsyncImage(url: URL(string: country.flags?.png ?? "")) { phase in
                         switch (phase) {
                         case .success(let image):
                             image.resizable().scaledToFill()
@@ -29,12 +48,16 @@ struct CountriesListView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 6))
                     
                     VStack(alignment: .leading) {
-                        Text(country.name.common)
-                            .font(.headline)
+                        if let commonName = country.name?.common {
+                            Text(commonName)
+                                .font(.headline)
+                        }
                         
-                        Text(country.region)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                        if let region = country.region {
+                            Text(region)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
                         
                     }
                     
@@ -44,13 +67,11 @@ struct CountriesListView: View {
                 }
                 .padding(.vertical, 4)
             }
+        case .error(let message):
+            VStack {
+                Text(message)
+                    .foregroundColor(.red)
+            }
         }
-        .navigationTitle("Explore Countries")
-        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always) ,prompt: "Search by name or region")
-        
     }
-}
-
-#Preview {
-    CountriesListView()
 }

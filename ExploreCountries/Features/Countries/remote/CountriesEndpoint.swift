@@ -10,7 +10,6 @@ import Foundation
 enum CountriesEndpoint: Endpoint {
     case all(fields: [String])
     
-    var baseURL: URL { URL(string: "https://restcountries.com")! }
     var path: String { "/v3.1/all" }
     var method: HTTPMethod { .get }
     var headers: [String : String] { ["Accept": "application/json"] }

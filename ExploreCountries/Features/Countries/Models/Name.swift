@@ -8,6 +8,6 @@
 import Foundation
 
 struct Name: Decodable {
-    let common: String
-    let official: String
+    let common: String?
+    let official: String?
 }

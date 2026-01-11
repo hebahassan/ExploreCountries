@@ -8,7 +8,6 @@
 import Foundation
 
 protocol Endpoint {
-    var baseURL: URL { get }
     var path: String { get }
     var method: HTTPMethod { get }
     var headers: [String: String] { get }
@@ -17,7 +16,7 @@ protocol Endpoint {
 }
 
 extension Endpoint {
-    func makeRequest() throws -> URLRequest {
+    func makeRequest(baseURL: URL) throws -> URLRequest {
         let url = baseURL.appendingPathComponent(path)
         
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {

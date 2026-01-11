@@ -19,6 +19,6 @@ final class CountriesAPIImpl: CountriesAPI {
     }
     
     func getAllCountries(fields: [String]) async throws -> [Country] {
-        try await client.request(CountriesEndpoint.all(fields: fields))
+        try await client.request(CountriesEndpoint.all(fields: fields)) as [Country]
     }
 }

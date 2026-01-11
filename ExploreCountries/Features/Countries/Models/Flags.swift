@@ -8,7 +8,6 @@
 import Foundation
 
 struct Flags: Decodable {
-    let png: String
-    let svg: String
-    let alt: String
+    let png: String?
+    let svg: String?
 }
