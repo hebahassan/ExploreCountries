@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct ExploreCountriesApp: App {
+    private let container = AppContainer()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView(viewModel: container.makeCountriesViewModel()) 
         }
     }
 }
