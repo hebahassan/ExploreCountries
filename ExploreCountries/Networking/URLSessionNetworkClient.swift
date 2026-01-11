@@ -37,10 +37,8 @@ final class URLSessionNetworkClient: NetworkClient {
             }
             
             do {
-                print("BODY:", String(data: data, encoding: .utf8) ?? "nil")
                 return try decoder.decode(T.self, from: data)
             } catch {
-                print("ERROR: decoding error, \(error.localizedDescription)")
                 throw NetworkError.decodingError(error)
             }
         } catch {

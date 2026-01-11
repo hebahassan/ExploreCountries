@@ -51,8 +51,26 @@ final class CountriesViewModel: ObservableObject {
                 self.state = .loaded(countries)
             } catch {
                 guard !Task.isCancelled else { return }
-                self.state = .error(message: "Failed to load countries.")
+                self.state = .error(message: mapErrorToMessage(error))
             }
         }
+    }
+    
+    private func mapErrorToMessage(_ error: Error) -> String {
+        if let networkError = error as? NetworkError {
+            switch networkError {
+            case .noInternetConnection:
+                return "It looks like you're offline. Please check your internet connection."
+            case .invalidURL, .invalidResponse, .decodingError:
+                return "Something went wrong. Please try again later."
+            case .httpError(let statusCode, _):
+                if (500...599).contains(statusCode) { return "Server error. Please try again later." }
+                return "Request failed (code \(statusCode)). Please try again later."
+            case .other(let error):
+                return "Failed to load countries."
+            }
+        }
+        
+        return "Failed to load countries."
     }
 }

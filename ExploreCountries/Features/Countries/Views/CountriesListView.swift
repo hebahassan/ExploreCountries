@@ -30,7 +30,7 @@ struct CountriesListView: View {
     private var content: some View {
         switch viewModel.state {
         case .loading, .idle:
-            ProgressView("Loading...")
+            ProgressView()
         case .loaded(let countries):
             List(countries) { country in
                 HStack (spacing: 12) {
