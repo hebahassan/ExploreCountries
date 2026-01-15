@@ -22,7 +22,11 @@ final class AppContainer {
         CountriesAPIImpl(client: networkClient)
     }()
     
+    lazy var countriesService: CountriesService = {
+       CountriesServiceImpl(api: countriesAPI)
+    }()
+    
     func makeCountriesViewModel() -> CountriesViewModel {
-        CountriesViewModel(api: countriesAPI)
+        CountriesViewModel(service: countriesService)
     }
 }

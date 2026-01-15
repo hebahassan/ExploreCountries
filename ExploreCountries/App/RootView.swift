@@ -22,5 +22,5 @@ struct RootView: View {
 }
 
 #Preview {
-    RootView(viewModel: CountriesViewModel(api: PreviewCountriesAPI()))
+    RootView(viewModel: CountriesViewModel(service: PreviewCountriesService()))
 }

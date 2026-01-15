@@ -12,3 +12,9 @@ struct PreviewCountriesAPI: CountriesAPI {
         Country.dummy
     }
 }
+
+struct PreviewCountriesService: CountriesService {
+    func getCountries() async throws -> [Country] {
+        Country.dummy
+    }
+}

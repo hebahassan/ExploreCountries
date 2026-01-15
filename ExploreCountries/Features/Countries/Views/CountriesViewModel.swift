@@ -11,7 +11,7 @@ internal import Combine
 @MainActor
 final class CountriesViewModel: ObservableObject {
     
-    private let api: CountriesAPI
+    private let service: CountriesService
     
     enum State {
         case idle
@@ -29,8 +29,8 @@ final class CountriesViewModel: ObservableObject {
     
     private var loadTask: Task<Void, Never>?
     
-    init(api: CountriesAPI) {
-        self.api = api
+    init(service: CountriesService) {
+        self.service = service
     }
     
     deinit {
@@ -46,8 +46,7 @@ final class CountriesViewModel: ObservableObject {
             guard let self else { return }
             
             do {
-                let fields = ["name", "languages", "region", "subregion", "capital", "population", "flags", "currencies"]
-                let countries = try await api.getAllCountries(fields: fields)
+                let countries = try await service.getCountries()
                 self.state = .loaded(countries)
             } catch {
                 guard !Task.isCancelled else { return }
@@ -66,7 +65,7 @@ final class CountriesViewModel: ObservableObject {
             case .httpError(let statusCode, _):
                 if (500...599).contains(statusCode) { return "Server error. Please try again later." }
                 return "Request failed (code \(statusCode)). Please try again later."
-            case .other(let error):
+            case .other(_):
                 return "Failed to load countries."
             }
         }
