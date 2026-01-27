@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Country: Codable, Identifiable {
+struct Country: Codable, Identifiable, Hashable {
     var id: UUID = UUID()
     
     let region: String?
@@ -21,6 +21,11 @@ struct Country: Codable, Identifiable {
     
     private enum CodingKeys: String, CodingKey {
         case region, subregion, population, flags, currencies, languages, capital, name
+    }
+    
+    func getPopulationNumber() -> String {
+        guard let population else { return "Unknown" }
+        return "\(population)"
     }
 }
 
