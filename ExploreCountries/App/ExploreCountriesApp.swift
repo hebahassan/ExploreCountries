@@ -10,10 +10,12 @@ import SwiftUI
 @main
 struct ExploreCountriesApp: App {
     private let container = AppContainer()
+    @State private var favManager = FavoritesManager()
     
     var body: some Scene {
         WindowGroup {
-            RootView(viewModel: container.makeCountriesViewModel()) 
+            RootView(viewModel: container.makeCountriesViewModel())
+                .environment(favManager)
         }
     }
 }

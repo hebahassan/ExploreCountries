@@ -26,7 +26,7 @@ final class CountriesServiceImpl: CountriesService {
             return cached
         }
         
-        let fields = ["name", "languages", "region", "subregion", "capital", "population", "flags", "currencies"]
+        let fields = ["name", "languages", "region", "subregion", "capital", "population", "flags", "currencies", "cca2"]
         let countries = try await api.getAllCountries(fields: fields)
         print("from api..")
         

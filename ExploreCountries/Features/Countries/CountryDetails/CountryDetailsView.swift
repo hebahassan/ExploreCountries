@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CountryDetailsView: View {
     let country: Country
+    @Environment(FavoritesManager.self) private var favoritesManager
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -27,6 +28,7 @@ struct CountryDetailsView: View {
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .padding(.horizontal)
+                .padding(.vertical, 20)
                 .shadow(radius: 10)
             } else {
                 fallbackImage
@@ -45,6 +47,17 @@ struct CountryDetailsView: View {
         .background(Color(red: 138/255, green: 154/255, blue: 91/255, opacity: 0.5))
         .navigationTitle(country.name?.official ?? "")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    favoritesManager.toggle(country.id)
+                } label: {
+                     Image(systemName: favoritesManager.isFavorite(country.id) ? "star.fill" : "star")
+                        .foregroundStyle(.yellow)
+                }
+            }
+        }
+        .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
     }
     
     var fallbackImage: some View {

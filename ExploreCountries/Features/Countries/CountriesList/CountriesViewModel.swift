@@ -21,6 +21,22 @@ final class CountriesViewModel: ObservableObject {
     }
     
     @Published private(set) var state: State = .idle
+    @Published var searchText: String = ""
+    
+    var filteredCountries: [Country] {
+        guard case .loaded(let countries) = state else {
+            return []
+        }
+
+        if searchText.isEmpty {
+            return countries
+        } else {
+            return countries.filter { country in
+                country.name?.common?.localizedCaseInsensitiveContains(searchText) ?? false ||
+                (country.region?.localizedCaseInsensitiveContains(searchText) ?? false)
+            }
+        }
+    }
     
     var isLoading: Bool {
         if case .loading = state { return true }
